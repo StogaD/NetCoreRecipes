@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
+using CoreWebApp.Api;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SwaggerDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiConventionType(typeof(CustomApiConvention))]
     public class BookController : ControllerBase
     {
         // GET api/book
@@ -19,6 +17,7 @@ namespace SwaggerDemo.Controllers
         }
 
         // GET api/book/5
+        [ApiConventionMethod(typeof(CustomApiConvention), "MySpecialConvention")]
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
@@ -26,6 +25,9 @@ namespace SwaggerDemo.Controllers
         }
 
         // POST api/book
+        [ProducesResponseType(404)]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(500)]
         [HttpPost]
         public void Post([FromBody] string value)
         {
@@ -33,13 +35,13 @@ namespace SwaggerDemo.Controllers
 
         // PUT api/book/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void BookPut(int id, [FromBody] string value)
         {
         }
 
         // DELETE api/book/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void BookDelete(int id)
         {
         }
     }
