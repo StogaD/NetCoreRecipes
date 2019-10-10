@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ConfigDemo.ConfigDemo.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace ConfigDemo.Controllers
 {
@@ -10,6 +12,12 @@ namespace ConfigDemo.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly Parameters _parameters;
+
+        public ValuesController(IOptions<Parameters> parameters)
+        { 
+            _parameters = parameters.Value;
+        }
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()

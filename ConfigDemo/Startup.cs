@@ -33,6 +33,18 @@ namespace ConfigDemo
             var speed = Configuration.GetValue<int>("Parameters:Speed");
 
             var section = Configuration.GetSection("Parameters");
+
+            services.AddOptions<Parameters>().Configure(o => o.Speed = 2);
+
+            services.Configure<Parameters>(Configuration.GetSection("Parameters"));
+
+            services.PostConfigure<Parameters>(x => x.Speed = x.Speed * 2);
+
+            using (var scope = services.BuildServiceProvider().CreateScope())
+            {
+                var paramtersRetrivedFromIOptions = scope.ServiceProvider.GetService<IOptions<Parameters>>();
+            }
+
             if (section.Exists())
             {
                 var getValue = section.GetValue(typeof(int), "Speed");
