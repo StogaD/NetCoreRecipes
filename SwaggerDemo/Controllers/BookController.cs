@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CoreWebApp.Api;
 using CoreWebApp.Api.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SwaggerDemo.Controllers
