@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ConfigDemo.ConfigDemo.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +31,15 @@ namespace ConfigDemo
             var defaultUrl = Configuration.GetValue<string>("url", "http://localhost:9200");
 
             var speed = Configuration.GetValue<int>("Parameters:Speed");
+
+            var section = Configuration.GetSection("Parameters");
+            if (section.Exists())
+            {
+                var getValue = section.GetValue(typeof(int), "Speed");
+
+                var bindValue = new Parameters();
+                section.Bind(bindValue);
+            };
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
