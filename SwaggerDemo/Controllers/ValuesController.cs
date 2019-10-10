@@ -36,7 +36,17 @@ namespace SwaggerDemo.Controllers
         {
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// Delete specific product - description comes from 'summary' section
+        /// </summary>
+        /// <param name="id"></param>
+        /// <remarks>
+        /// Sample request
+        ///  DELETE
+        ///  {
+        ///  "id" : 14541
+        ///  }
+        /// </remarks>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
