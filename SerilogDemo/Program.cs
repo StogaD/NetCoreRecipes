@@ -16,7 +16,7 @@ namespace SerilogDemo
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
+                .WriteTo.Console(Serilog.Events.LogEventLevel.Verbose)
                 .WriteTo.File("logs\\log.txt", rollingInterval: RollingInterval.Hour)
                 .CreateLogger();
 
