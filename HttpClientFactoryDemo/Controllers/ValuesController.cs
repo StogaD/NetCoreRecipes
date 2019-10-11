@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HttpClientFactoryDemo.Models;
+using HttpClientFactoryDemo.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HttpClientFactoryDemo.Controllers
@@ -11,6 +12,13 @@ namespace HttpClientFactoryDemo.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly IUserService _userService;
+
+        public ValuesController(IUserService userService )
+        {
+            _userService = userService;
+        }
+
         // GET api/albums
         [HttpGet("albums")]
         public ActionResult<IEnumerable<Album>> GetAlbums()
@@ -47,19 +55,16 @@ namespace HttpClientFactoryDemo.Controllers
         }
         // GET api/users
         [HttpGet("users")]
-        public ActionResult<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            return new User[] {
-                new User() { Id = 1 },
-                new User() { Id = 2 }
-            };
+            return await _userService.GetUsers();
         }
 
         // GET api/users/5
         [HttpGet("users/{id}")]
-        public ActionResult<User> GetUsers(int id)
+        public async Task<User> GetUsers(int id)
         {
-            return new User { Id = id }; 
+            return await _userService.GetUser(id);
         }
     }
 }
