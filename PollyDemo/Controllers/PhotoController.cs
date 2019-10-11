@@ -13,6 +13,8 @@ namespace PollyDemo.Controllers
     public class PhotoController : ControllerBase
     {
         private readonly IPhotoService _photoService;
+        private readonly IProtectedService _protectedService;
+
         public PhotoController(IPhotoService photoService)
         {
             _photoService = photoService;
@@ -29,6 +31,11 @@ namespace PollyDemo.Controllers
         public async Task<Photo> Get(int id)
         {
             return await _photoService.GetPhoto(id);
+        }
+        [HttpGet("GetSecretPhoto")]
+        public async Task<Photo> GetSecretPhoto(int id)
+        {
+            return await _protectedService.GetPhoto(id);
         }
     }
 }
