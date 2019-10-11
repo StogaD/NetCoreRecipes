@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
 using SerilogDemo.Logger;
 
 namespace SerilogDemo
@@ -30,10 +31,15 @@ namespace SerilogDemo
             //var outputTemplate = "[{Timestamp:HH:mm:ss} --> {Level:u3}] {Message:lj}  {AppInfo}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
+                {
+                    AutoRegisterTemplate = true,
+                    MinimumLogEventLevel = LogEventLevel.Error,
+                })
                 //.Enrich.WithAppInfo() //custom enricher
                 //.Enrich.WithMachineName() //from nuGet
                 //.WriteTo.Console(LogEventLevel.Verbose, outputTemplate)
-                .ReadFrom.Configuration(Configuration)
+               // .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
 
             Log.Information("Start Application {MachineName}");

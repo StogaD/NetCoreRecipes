@@ -21,7 +21,7 @@ namespace SerilogDemo.Controllers
         public ActionResult<IEnumerable<string>> Get()
         {
             _logger.Information(messageTemplate: "Log informaton from {0} - OK", propertyValue: nameof(ValuesController));
-
+            _logger.Error("Move to ElasticSearch logstash");
             return new string[] { "value1", "value2" };
         }
 
