@@ -29,8 +29,15 @@ namespace HttpClientFactoryDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IUserService, UserServiceWithBasicClientUsage>();
+            services.AddScoped<IPhotoService, PhotoServiceWithNamedClient>();
 
             services.AddHttpClient();
+            services.AddHttpClient("photos", c =>
+            {
+                c.BaseAddress = new Uri("https://jsonplaceholder.typicode.com");
+                c.DefaultRequestHeaders.Add("Accept", "application/json");
+                c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
+            });
 
             services.AddSwaggerGen(c =>
             {

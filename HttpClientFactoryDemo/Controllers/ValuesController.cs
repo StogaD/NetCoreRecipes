@@ -13,10 +13,12 @@ namespace HttpClientFactoryDemo.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
 
-        public ValuesController(IUserService userService )
+        public ValuesController(IUserService userService, IPhotoService photoService)
         {
             _userService = userService;
+            _photoService = photoService;
         }
 
         // GET api/albums
@@ -39,19 +41,16 @@ namespace HttpClientFactoryDemo.Controllers
 
         // GET api/photo
         [HttpGet("photos")]
-        public ActionResult<IEnumerable<Photo>> GetPhotos()
+        public async Task<IEnumerable<Photo>> GetPhotos()
         {
-            return new List<Photo> {
-                new Photo() { Id = 1 },
-                new Photo() { Id = 2 }
-            };
+            return await _photoService.GetPhotos();
         }
 
         // GET api/photo/5
         [HttpGet("photos/{id}")]
-        public ActionResult<Photo> GetPhoto(int id)
+        public async Task<Photo> GetPhoto(int id)
         {
-            return new Photo() { Id = id };
+            return await _photoService.GetPhotoItem(id);
         }
         // GET api/users
         [HttpGet("users")]
