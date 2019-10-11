@@ -28,6 +28,7 @@ namespace PollyDemo.Services
         public ProtectedService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _configuration = configuration;
         }
 
         public async Task<Photo> GetPhoto(int id)

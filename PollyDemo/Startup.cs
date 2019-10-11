@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Polly;
+using Polly.Extensions.Http;
 using PollyDemo.Polly;
 using PollyDemo.Services;
 using Swashbuckle.AspNetCore.Swagger;
@@ -28,6 +30,13 @@ namespace PollyDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var registry = services.AddPolicyRegistry();
+            registry.Add("MyDefaultPolicy",
+               HttpPolicyExtensions
+                  .HandleTransientHttpError()
+                  .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                  .WaitAndRetryAsync(3, retryAttemp => TimeSpan.FromSeconds(2)));
+
             services.AddHttpClient<IProtectedService, ProtectedService>();
 
             services.AddHttpClient<IPhotoService, PhotoService>(options =>
@@ -37,7 +46,8 @@ namespace PollyDemo
 
            })
            .SetHandlerLifetime(TimeSpan.FromMinutes(5)) //default is 2
-           .AddPolicyHandler((sp,req) => new CustomPolicies().GetRetryPolicyWithLogging(sp,req));
+           .AddPolicyHandler((sp, req) => new CustomPolicies().GetRetryPolicyWithLogging(sp, req))
+           .AddPolicyHandlerFromRegistry("MyDefaultPolicy");
                      
            services.AddSwaggerGen(c =>
             {
