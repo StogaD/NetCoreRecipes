@@ -67,5 +67,37 @@ namespace PollyDemo.Polly
                     });
                    
         }
+        public IAsyncPolicy<HttpResponseMessage> GetRetryPolicyHonourRetryAfter_429(IServiceProvider provider, HttpRequestMessage request)
+        {
+            return HttpPolicyExtensions
+                  .HandleTransientHttpError() //50xx or 408 (timeout)
+                  .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                  .WaitAndRetryAsync(3,
+                    sleepDurationProvider: (retryAttemp, response, ctx) =>
+                    {
+                        var retryAfter = response?.Result?.Headers.RetryAfter;
+                        if (retryAfter !=null && retryAfter.Date .HasValue)
+                        {
+                            return (retryAfter.Date.Value - DateTime.UtcNow);
+                        }
+                        return TimeSpan.Zero;
+
+                        // Remark: Azure services i.e CosmosDb throw DocumentClientException and 429 Code
+                        // need to be handled in other way
+                    },
+                    onRetryAsync: async (outcome, timespan, retryAttempt, context) =>
+                    {
+                        var logger = provider.GetService<ILogger<HttpClient>>();
+                        var logLevel = outcome.Exception != null ? LogLevel.Error : LogLevel.Warning;
+
+                        logger.Log(
+                            logLevel, outcome.Exception,
+                            "Delaying for {delay}ms, then making retry {retry}.",
+                            timespan.TotalMilliseconds,
+                            retryAttempt);
+                        await Task.CompletedTask;
+                    });
+
+        }
     }
 }
