@@ -27,13 +27,13 @@ namespace SerilogDemo
 
         public static void Main(string[] args)
         {
-            var outputTemplate = "[{Timestamp:HH:mm:ss} --> {Level:u3}] {Message:lj}  {AppInfo}{NewLine}{Exception}";
+            //var outputTemplate = "[{Timestamp:HH:mm:ss} --> {Level:u3}] {Message:lj}  {AppInfo}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
-                .Enrich.WithAppInfo() //custom enricher
-                .Enrich.WithMachineName() //from nuGet
-                .WriteTo.Console(LogEventLevel.Verbose, outputTemplate)
-                //.ReadFrom.Configuration(Configuration)
+                //.Enrich.WithAppInfo() //custom enricher
+                //.Enrich.WithMachineName() //from nuGet
+                //.WriteTo.Console(LogEventLevel.Verbose, outputTemplate)
+                .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
 
             Log.Information("Start Application {MachineName}");
