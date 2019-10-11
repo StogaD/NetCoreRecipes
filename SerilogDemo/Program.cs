@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
+using SerilogDemo.Logger;
 
 namespace SerilogDemo
 {
@@ -25,11 +27,16 @@ namespace SerilogDemo
 
         public static void Main(string[] args)
         {
+            var outputTemplate = "[{Timestamp:HH:mm:ss} --> {Level:u3}] {Message:lj}  {AppInfo}{NewLine}{Exception}";
+
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(Configuration)
+                .Enrich.WithAppInfo() //custom enricher
+                .Enrich.WithMachineName() //from nuGet
+                .WriteTo.Console(LogEventLevel.Verbose, outputTemplate)
+                //.ReadFrom.Configuration(Configuration)
                 .CreateLogger();
 
-            Log.Information("Start Application");
+            Log.Information("Start Application {MachineName}");
             Log.Debug("Debug message");
 
             CreateWebHostBuilder(args).Build().Run();
