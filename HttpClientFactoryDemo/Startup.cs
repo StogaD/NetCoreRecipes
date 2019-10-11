@@ -31,13 +31,18 @@ namespace HttpClientFactoryDemo
             services.AddScoped<IUserService, UserServiceWithBasicClientUsage>();
             services.AddScoped<IPhotoService, PhotoServiceWithNamedClient>();
 
-            services.AddHttpClient();
+           // services.AddHttpClient();
             services.AddHttpClient("photos", c =>
             {
                 c.BaseAddress = new Uri("https://jsonplaceholder.typicode.com");
                 c.DefaultRequestHeaders.Add("Accept", "application/json");
                 c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
             });
+            services.AddHttpClient<IAlbumService, AlbumServiceWithTypedClient>(options =>
+            {
+                options.Timeout = TimeSpan.FromSeconds(5);
+            });
+;
 
             services.AddSwaggerGen(c =>
             {

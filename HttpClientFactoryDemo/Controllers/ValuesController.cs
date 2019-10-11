@@ -14,29 +14,28 @@ namespace HttpClientFactoryDemo.Controllers
     {
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
+        private readonly IAlbumService _albumService;
 
-        public ValuesController(IUserService userService, IPhotoService photoService)
+        public ValuesController(IUserService userService, IPhotoService photoService, IAlbumService albumService)
         {
             _userService = userService;
             _photoService = photoService;
+            _albumService = albumService;
         }
 
         // GET api/albums
         [HttpGet("albums")]
-        public ActionResult<IEnumerable<Album>> GetAlbums()
+        public async Task<IEnumerable<Album>> GetAlbums()
         {
 
-            return new List<Album> {
-                new Album() { Id = 1 },
-                new Album() { Id = 2 }
-            };
+            return await _albumService.GetAlbums();
         }
 
         // GET api/albums/5
         [HttpGet("albums/{id}")]
-        public ActionResult<Album> GetAlbum(int id)
+        public async Task<Album> GetAlbum(int id)
         {
-            return new Album() { Id = id };
+            return await _albumService.GetAlbumItem(id);
         }
 
         // GET api/photo
