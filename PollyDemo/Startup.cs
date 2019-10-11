@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PollyDemo.Polly;
 using PollyDemo.Services;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -30,9 +31,13 @@ namespace PollyDemo
             services.AddHttpClient<IPhotoService, PhotoService>(options =>
            {
                options.BaseAddress = new Uri("https://testpolly.free.beeceptor.com");
+               //create own rules in beeceptor ie. return 408 when url ends with /api/photos/408 
 
-           });
-            services.AddSwaggerGen(c =>
+           })
+           .SetHandlerLifetime(TimeSpan.FromMinutes(5)) //default is 2
+           .AddPolicyHandler(new CustomPolicies().GetRetryPolicy());
+           
+           services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1",new Info
                     {  Description = "Polly Demo API",  Title = "My API", Version = "Version 1"});
