@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace SerilogDemo.Controllers
 {
@@ -10,10 +11,17 @@ namespace SerilogDemo.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly ILogger _logger;
+        public ValuesController(ILogger logger)
+        {
+            _logger = logger;
+        }
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            _logger.Information(messageTemplate: "Log informaton from {0} - OK", propertyValue: nameof(ValuesController));
+
             return new string[] { "value1", "value2" };
         }
 
