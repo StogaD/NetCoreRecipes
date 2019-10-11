@@ -35,7 +35,7 @@ namespace PollyDemo
 
            })
            .SetHandlerLifetime(TimeSpan.FromMinutes(5)) //default is 2
-           .AddPolicyHandler(new CustomPolicies().GetRetryPolicyWithJitter());
+           .AddPolicyHandler((sp,req) => new CustomPolicies().GetRetryPolicyWithLogging(sp,req));
                      
            services.AddSwaggerGen(c =>
             {
