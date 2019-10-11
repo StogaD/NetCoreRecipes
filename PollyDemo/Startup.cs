@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PollyDemo.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace PollyDemo
 {
@@ -25,6 +27,16 @@ namespace PollyDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient<IPhotoService, PhotoService>(options =>
+           {
+               options.BaseAddress = new Uri("https://testpolly.free.beeceptor.com");
+
+           });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1",new Info
+                    {  Description = "Polly Demo API",  Title = "My API", Version = "Version 1"});
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -40,7 +52,11 @@ namespace PollyDemo
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Demo API");
+            });
             app.UseHttpsRedirection();
             app.UseMvc();
         }
