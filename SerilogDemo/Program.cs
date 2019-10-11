@@ -13,11 +13,20 @@ namespace SerilogDemo
 {
     public class Program
     {
+        private static readonly string Env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+        private static readonly IConfigurationRoot Configuration = new ConfigurationBuilder()
+            .SetBasePath(Path.GetDirectoryName(typeof(Program).Assembly.Location))
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{Env}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
+
+
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console(Serilog.Events.LogEventLevel.Verbose)
-                .WriteTo.File("logs\\log.txt", rollingInterval: RollingInterval.Hour)
+                .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
 
             Log.Information("Start Application");
