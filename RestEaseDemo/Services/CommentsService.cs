@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RestEaseDemo.Model;
+using RestEaseDemo.Repository;
 
 namespace RestEaseDemo.Services
 {
@@ -16,27 +17,24 @@ namespace RestEaseDemo.Services
 
     public class CommentsService : ICommentsService
     {
-        private readonly HttpClient _httpClient;
-        private readonly string _remoteServiceBaseUrl = "https://jsonplaceholder.typicode.com/Comments";
+        private readonly ICommentRepository _commentRepo;
 
-        public CommentsService(HttpClient httpClient)
+        public CommentsService(ICommentRepository commentRepo)
         {
-            _httpClient = httpClient;
+            _commentRepo = commentRepo;
         }
         public async Task<Comment> GetCommentItemAsync(int id)
         {
-            var ressponseString = await _httpClient.GetStringAsync($"{_remoteServiceBaseUrl}/{id}");
-            var Comments = JsonConvert.DeserializeObject<Comment>(ressponseString);
+            var comment = await _commentRepo.GetComment(id);
 
-            return Comments;
+            return comment;
         }
 
         public async Task<IEnumerable<Comment>> GetComments()
         {
-            var ressponseString = await _httpClient.GetStringAsync(_remoteServiceBaseUrl);
-            var Comments = JsonConvert.DeserializeObject<IEnumerable<Comment>>(ressponseString);
+            var comment = await _commentRepo.GetComments();
 
-            return Comments;
+            return comment;
         }
     }
 }

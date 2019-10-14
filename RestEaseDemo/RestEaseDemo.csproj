@@ -11,8 +11,4 @@
     <PackageReference Include="RestEase" Version="1.4.10" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repository\" />
-  </ItemGroup>
-
 </Project>

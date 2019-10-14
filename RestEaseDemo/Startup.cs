@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RestEaseDemo.Model;
+using RestEaseDemo.Repository;
 using RestEaseDemo.Services;
 
 namespace RestEaseDemo
@@ -27,7 +28,15 @@ namespace RestEaseDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient<ICommentsService, CommentsService>();
+
+            var baseUrl = "https://jsonplaceholder.typicode.com";
+            var restClient = RestEase.RestClient.For<ICommentRepository>(baseUrl);
+
+            services.AddSingleton<ICommentRepository>(p => restClient);
+
+            services.AddTransient<ICommentsService, CommentsService>();
+
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
