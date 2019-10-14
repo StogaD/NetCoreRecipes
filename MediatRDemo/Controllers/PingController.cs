@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
+using MediatRDemo.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediatRDemo.Controllers
@@ -10,18 +12,17 @@ namespace MediatRDemo.Controllers
     [ApiController]
     public class PingController : ControllerBase
     {
+        private readonly IMediator _mediator;
+        public PingController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IActionResult> Get(string message)
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
+            await _mediator.Publish<NotificationMessage>( new NotificationMessage { Message = message });
+            return Ok();
         }
 
         // POST api/values
