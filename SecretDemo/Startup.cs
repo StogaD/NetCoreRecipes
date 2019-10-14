@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -25,6 +26,17 @@ namespace SecretDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            //dotnet user-secrets set "Key" "Value"
+
+            //1 Get key from secret
+            var connectionFromSecret= Configuration["Db:ConnectionString"];
+            //2 Get password from secrets
+            var builder = new SqlConnectionStringBuilder(Configuration.GetConnectionString("Movies"));
+            var password = Configuration["DbPassword"];
+            builder.Password = string.IsNullOrWhiteSpace(password) ? "" : password;
+            var connection = builder.ConnectionString;
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
