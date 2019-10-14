@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SecretDemo.Configuration;
 
 namespace SecretDemo
 {
@@ -40,6 +41,16 @@ namespace SecretDemo
             //3  Get from AzureKeyVault (see Program.cs)
             var keysecretName = Configuration["KeyVaultOptions:SecretName"];
             var secret = Configuration[$"{keysecretName}"];
+
+
+
+            services.Configure<SecretKeys>(o =>
+            {
+                o.Sekretkey1 = Configuration.GetValue<string>("KeyVaultOptions:SecretName1");
+                o.Sekretkey2 = Configuration.GetValue<string>("KeyVaultOptions:SecretName2");
+                o.Sekretkey3 = Configuration.GetValue<string>("KeyVaultOptions:SecretName3");
+            });
+       
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
