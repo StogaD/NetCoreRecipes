@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SwaggerDemo.AuthFilter;
 
-namespace SwaggerDemo.Controllers
+namespace RestEaseDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -14,7 +12,6 @@ namespace SwaggerDemo.Controllers
     {
         // GET api/values
         [HttpGet]
-        [Authorize]
         public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "value1", "value2" };
@@ -39,17 +36,7 @@ namespace SwaggerDemo.Controllers
         {
         }
 
-        /// <summary>
-        /// Delete specific product - description comes from 'summary' section
-        /// </summary>
-        /// <param name="id"></param>
-        /// <remarks>
-        /// Sample request
-        ///  DELETE
-        ///  {
-        ///  "id" : 14541
-        ///  }
-        /// </remarks>
+        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

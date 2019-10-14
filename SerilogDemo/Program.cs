@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
 using SerilogDemo.Logger;
 
@@ -36,10 +37,11 @@ namespace SerilogDemo
                     AutoRegisterTemplate = true,
                     MinimumLogEventLevel = LogEventLevel.Error,
                 })
+                 .Enrich.WithExceptionDetails()
                 //.Enrich.WithAppInfo() //custom enricher
                 //.Enrich.WithMachineName() //from nuGet
                 //.WriteTo.Console(LogEventLevel.Verbose, outputTemplate)
-               // .ReadFrom.Configuration(Configuration)
+                // .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
 
             Log.Information("Start Application {MachineName}");
