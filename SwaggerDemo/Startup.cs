@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SwaggerDemo.AuthFilter;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace SwaggerDemo
@@ -38,7 +39,7 @@ namespace SwaggerDemo
                         Title = "My API",
                         Version = "Version 1"
                     });
-
+                c.OperationFilter<AuthorizationHeaderOperationFilter>("MyOperationFilter");
                 var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
