@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Serilog;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace MediatRDemo
 {
@@ -27,6 +28,18 @@ namespace MediatRDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1",
+                    new Info
+                    {
+                        Contact = new Contact { Email = "xxx@o2.pl", Name = "DawidS", Url = "http://google.pl" },
+                        Description = "Example API",
+                        License = new License { Name = "Licence name" },
+                        Title = "My API",
+                        Version = "Version 1"
+                    });
+            });
 
             services.AddSingleton(Log.Logger);
 
@@ -47,7 +60,12 @@ namespace MediatRDemo
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Demo API");
+                c.RoutePrefix = string.Empty;
+            });
             app.UseHttpsRedirection();
             app.UseMvc();
         }

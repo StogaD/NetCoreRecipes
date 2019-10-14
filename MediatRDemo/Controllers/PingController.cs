@@ -18,12 +18,21 @@ namespace MediatRDemo.Controllers
             _mediator = mediator;
         }
         // GET api/values
-        [HttpGet]
-        public async Task<IActionResult> Get(string message)
+        [HttpGet("/testnotifiation")]
+        public async Task NotifyTest(string message)
         {
             await _mediator.Publish<NotificationMessage>( new NotificationMessage { Message = message });
-            return Ok();
         }
+
+        // GET api/values
+        [ProducesResponseType(statusCode: 200, type: typeof(string))]
+        [HttpGet("/testrequest")]
+        public async Task<string> RequestTest(string message)
+        {
+            var response = await _mediator.Send(new RequestMessage { Message = message });
+            return response;
+        }
+
 
         // POST api/values
         [HttpPost]
