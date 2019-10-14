@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -43,7 +44,7 @@ namespace MediatRDemo
 
             services.AddSingleton(Log.Logger);
 
-            services.AddMediatR(typeof(Startup).Assembly);
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -64,7 +65,6 @@ namespace MediatRDemo
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Demo API");
-                c.RoutePrefix = string.Empty;
             });
             app.UseHttpsRedirection();
             app.UseMvc();

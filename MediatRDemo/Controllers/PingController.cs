@@ -34,6 +34,15 @@ namespace MediatRDemo.Controllers
         }
 
 
+        // GET api/values
+        [ProducesResponseType(statusCode: 200, type: typeof(string))]
+        [HttpGet("/oneayrequest")]
+        public async Task<IActionResult> OneWayRequestTest(string message)
+        {
+            await _mediator.Send(new OneWayRequestMessage { Message = message });
+            return Ok();
+        }
+
         // POST api/values
         [HttpPost]
         public void Post([FromBody] string value)
