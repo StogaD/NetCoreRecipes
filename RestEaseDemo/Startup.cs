@@ -33,24 +33,34 @@ namespace RestEaseDemo
             var baseUrl = "https://jsonplaceholder.typicode.com";
             var restClient = RestEase.RestClient.For<ICommentRepository>(baseUrl);
 
-            services.AddHttpClient("restEasyClient", options =>
-            {
-                options.BaseAddress = new Uri(baseUrl);
-            });
+            //services.AddHttpClient("restEasyClient", options =>
+            //{
+            //    options.BaseAddress = new Uri(baseUrl);
+            //});
 
             //using scope - not convinient way but it works
-            using (var scope = services.BuildServiceProvider().CreateScope())
+            //using (var scope = services.BuildServiceProvider().CreateScope())
+            //{
+            //    var clinetFactory = scope.ServiceProvider.GetService<IHttpClientFactory>();
+            //    var httpClientPost = clinetFactory.CreateClient("restEasyClient");
+
+
+            //    var restClientBlog = RestEase.RestClient.For<IBlogRepository>(httpClientPost);
+
+            //    services.AddSingleton<IBlogRepository>(restClientBlog);
+            //}
+
+            services.AddHttpClient("restEasyClient_v2", c =>
             {
-                var clinetFactory = scope.ServiceProvider.GetService<IHttpClientFactory>();
-                var httpClientPost = clinetFactory.CreateClient("restEasyClient");
+                c.BaseAddress = new Uri("https://jsonplaceholder.typicode.com");
+                c.DefaultRequestHeaders.Add("Accept", "application/json");
+                c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
+            })
+            //. Polly can be also integrated
+            .AddTypedClient(c => RestEase.RestClient.For<IBlogRepository>(c));
 
 
-                var restClientBlog = RestEase.RestClient.For<IBlogRepository>(httpClientPost);
-
-                services.AddSingleton<IBlogRepository>(restClientBlog);
-            }
-
-            services.AddSingleton<ICommentRepository>(p => restClient);
+        services.AddSingleton<ICommentRepository>(p => restClient);
 
             services.AddTransient<ICommentsService, CommentsService>();
 
