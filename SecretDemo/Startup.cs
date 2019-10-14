@@ -37,6 +37,11 @@ namespace SecretDemo
             builder.Password = string.IsNullOrWhiteSpace(password) ? "" : password;
             var connection = builder.ConnectionString;
 
+            //3  Get from AzureKeyVault (see Program.cs)
+            var keysecretName = Configuration["KeyVaultOptions:SecretName"];
+            var secret = Configuration[$"{keysecretName}"];
+
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
