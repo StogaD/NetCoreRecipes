@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,23 @@ namespace RestEaseDemo
 
             var baseUrl = "https://jsonplaceholder.typicode.com";
             var restClient = RestEase.RestClient.For<ICommentRepository>(baseUrl);
+
+            services.AddHttpClient("restEasyClient", options =>
+            {
+                options.BaseAddress = new Uri(baseUrl);
+            });
+
+            //using scope - not convinient way but it works
+            using (var scope = services.BuildServiceProvider().CreateScope())
+            {
+                var clinetFactory = scope.ServiceProvider.GetService<IHttpClientFactory>();
+                var httpClientPost = clinetFactory.CreateClient("restEasyClient");
+
+
+                var restClientBlog = RestEase.RestClient.For<IBlogRepository>(httpClientPost);
+
+                services.AddSingleton<IBlogRepository>(restClientBlog);
+            }
 
             services.AddSingleton<ICommentRepository>(p => restClient);
 
