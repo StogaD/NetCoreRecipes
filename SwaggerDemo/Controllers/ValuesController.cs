@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SwaggerDemo.AuthFilter;
 
 namespace SwaggerDemo.Controllers
 {
@@ -12,6 +14,7 @@ namespace SwaggerDemo.Controllers
     {
         // GET api/values
         [HttpGet]
+        [Authorize]
         public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "value1", "value2" };
