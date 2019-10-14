@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -28,7 +29,14 @@ namespace CookiesDemo
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
-               { });
+               {
+                   opt.Events.OnRedirectToLogin = (ctx) =>
+                   {
+                       ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                       return Task.CompletedTask;
+                   };
+
+               });
 
                services.AddSwaggerGen(c => c.SwaggerDoc("crv", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Demo Auth API" }));
 
