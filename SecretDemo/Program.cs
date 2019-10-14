@@ -1,4 +1,8 @@
-﻿#define ManagedIdentities
+﻿//#define EnableKeyVaultAccess
+#if EnableKeyVaultAccess
+  //  #define ManagedIdentities
+#endif
+
 //When host on Azure enable ManagedIdentities 
 //If run local or host outside Azure use cert solution
 
@@ -30,8 +34,8 @@ namespace SecretDemo
             .ConfigureAppConfiguration((ctx, con) =>
             {
                 var configuration = con.Build();
-
-#if (ManagedIdentities)
+#if (EnableKeyVaultAccess)
+    #if (ManagedIdentities)
                 var azureServiceTokenProvider = new AzureServiceTokenProvider();
 
                 var keyVaultClient = new KeyVaultClient(
@@ -67,6 +71,7 @@ namespace SecretDemo
                                      cert);
 
                 store.Close();
+    #endif
 #endif
             })
                     .UseStartup<Startup>();
