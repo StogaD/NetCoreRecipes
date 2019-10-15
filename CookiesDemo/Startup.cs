@@ -31,17 +31,17 @@ namespace CookiesDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ReqNamePolicy",
+                    policy => policy.RequireClaim("FullName", "spiderman", "Batman"));
+            });
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
                 {
-                   opt.EventsType = typeof(CustomCookieAuthenticationEvents);
-                    /* This was overwritten by above code. So move to the CustomCookiesAuth
-                     opt.Events.OnRedirectToLogin = (ctx) =>
-                     {
-                         ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                         return Task.CompletedTask;
-                     };
-                      };*/
+                    opt.EventsType = typeof(CustomCookieAuthenticationEvents);
                 });
 
             services.AddScoped<CustomCookieAuthenticationEvents>(sp => new CustomCookieAuthenticationEvents()
@@ -54,7 +54,9 @@ namespace CookiesDemo
                 OnRedirectToAccessDenied = (r) =>
                 {
                     r.Response.StatusCode = 403;
-                    var byteArray = Encoding.ASCII.GetBytes("Use admin@abc.com to signin as an administrator role");
+
+                    
+                    var byteArray = Encoding.ASCII.GetBytes("Use correct credentials from Readme.txt to test the demo");
                     r.Response.Body.Write(byteArray);
                     return Task.FromResult(0);
                 }

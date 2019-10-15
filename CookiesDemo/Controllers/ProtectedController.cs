@@ -27,5 +27,12 @@ namespace CookiesDemo.Controllers
         {
             return "Role-based authorization demo";
         }
+
+        [HttpGet("ClaimsDemo")]
+        [Authorize(Policy = "ReqNamePolicy")]
+        public string ClaimsDemo()
+        {
+            return "Claims-based authorization demo";
+        }
     }
 }
