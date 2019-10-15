@@ -11,6 +11,7 @@ namespace CacheDemo.CahceDemo
     public interface ICacheDemoService
     {
         Task<Album> GetUsingInMemoryCacheAsync(int id);
+        Task<Album> GetUsingInMemoryCacheV2Async(int id);
     }
     public class CacheDemoService : ICacheDemoService
     {
@@ -43,6 +44,21 @@ namespace CacheDemo.CahceDemo
                 album.FromCacheOrService = "Cache";
             }
             return album;
+        }
+
+        public async Task<Album> GetUsingInMemoryCacheV2Async(int id)
+        {
+            var source = "cache";
+            var retrivedPhoto = await _memoryCache.GetOrCreateAsync<Album>(id.ToString(), async (cache) =>
+            {
+            var album = await _albumService.GetAlbumItem(id);
+            source = "FromRepo";
+            return album;
+            });
+
+            retrivedPhoto.FromCacheOrService = source;
+
+            return retrivedPhoto;
         }
     }
 }

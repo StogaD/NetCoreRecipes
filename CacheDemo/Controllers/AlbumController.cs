@@ -33,5 +33,10 @@ namespace CacheDemo.Controllers
         {
             return await _cacheDemo.GetUsingInMemoryCacheAsync(id);
         }
+        [HttpGet("InMemoryCacheV2/{id}")]
+        public async Task<Album> GetUsingInMemoryCacheV2(int id)
+        {
+            return await _cacheDemo.GetUsingInMemoryCacheV2Async(id);
+        }
     }
 }
