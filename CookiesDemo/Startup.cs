@@ -30,12 +30,14 @@ namespace CookiesDemo
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
                {
-                   opt.Events.OnRedirectToLogin = (ctx) =>
-                   {
-                       ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                       return Task.CompletedTask;
-                   };
+                   opt.LoginPath = "/Api/Account/LogIn";
+                   opt.LogoutPath = "/Api/Account/LogOff";
 
+                   //opt.Events.OnRedirectToLogin = (ctx) =>
+                   //{
+                   //    ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                   //    return Task.CompletedTask;
+                   //};
                });
 
                services.AddSwaggerGen(c => c.SwaggerDoc("crv", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Demo Auth API" }));
