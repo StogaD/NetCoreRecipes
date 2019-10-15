@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CacheDemo.CahceDemo;
 using CacheDemo.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,7 @@ namespace CacheDemo
                options.SwaggerDoc("v1", new Info { Title = "Cache Demo" });
            });
 
+            services.AddScoped<ICacheDemoService, CacheDemoService>();
             services.AddHttpClient<IAlbumService, AlbumService>(conf => conf.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/albums"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

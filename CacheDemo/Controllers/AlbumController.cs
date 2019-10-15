@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CacheDemo.CahceDemo;
 using CacheDemo.Models;
 using CacheDemo.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,22 +14,24 @@ namespace CacheDemo.Controllers
     public class AlbumController : ControllerBase
     {
         private readonly IAlbumService _albumService;
-        public AlbumController(IAlbumService albumService)
+        private readonly ICacheDemoService _cacheDemo;
+        public AlbumController(IAlbumService albumService, ICacheDemoService cacheDemo)
         {
             _albumService = albumService;
+            _cacheDemo = cacheDemo;
         }
         // GET api/albums
-        [HttpGet("albums")]
+        [HttpGet]
         public async Task<IEnumerable<Album>> GetAlbums()
         {
             return await _albumService.GetAlbums();
         }
 
         // GET api/albums/5
-        [HttpGet("albums/{id}")]
-        public async Task<Album> GetAlbum(int id)
+        [HttpGet("InMemoryCache/{id}")]
+        public async Task<Album> GetUsingInMemoryCache(int id)
         {
-            return await _albumService.GetAlbumItem(id);
+            return await _cacheDemo.GetUsingInMemoryCacheAsync(id);
         }
     }
 }

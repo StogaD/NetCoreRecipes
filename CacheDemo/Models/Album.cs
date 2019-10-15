@@ -10,5 +10,8 @@ namespace CacheDemo.Models
         public int UserId { get; set; }
         public int Id { get; set; }
         public string Title { get; set; }
+
+        //* for cache inMemory Demo*/
+        public string FromCacheOrService { get; set; }
     }
 }

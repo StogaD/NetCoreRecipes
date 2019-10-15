@@ -1,4 +1,5 @@
 ﻿using CacheDemo.Models;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace CacheDemo.Services
     public class AlbumService : IAlbumService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _remoteServiceBaseUrl = "https://jsonplaceholder.typicode.com/albums";
+ 
         public AlbumService(HttpClient httpClient)
         {
             _httpClient = httpClient;
