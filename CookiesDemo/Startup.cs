@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using CookiesDemo.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,14 +30,19 @@ namespace CookiesDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-               .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
-               {
-                   opt.Events.OnRedirectToLogin = (ctx) =>
-                   {
-                       ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                       return Task.CompletedTask;
-                   };
-               });
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
+                {
+                   opt.EventsType = typeof(CustomCookieAuthenticationEvents);
+                    /* This was overwritten by above code. So move to the CustomCookiesAuth
+                     opt.Events.OnRedirectToLogin = (ctx) =>
+                     {
+                         ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                         return Task.CompletedTask;
+                     };
+                      };*/
+                });
+
+            services.AddScoped<CustomCookieAuthenticationEvents>();
 
             services.AddSingleton(Log.Logger);
             services.AddSwaggerGen(c => c.SwaggerDoc("crv", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Demo Auth API" }));

@@ -38,6 +38,8 @@ namespace CookiesDemo.Controllers
                     new Claim(ClaimTypes.Name, user.Email),
                     new Claim("FullName", user.FullName),
                     new Claim(ClaimTypes.Role, "Admin"),
+                    new Claim("LastChanged", DateTime.Now.ToString())
+
                 };
 
             var claimsIdentity = new ClaimsIdentity(
