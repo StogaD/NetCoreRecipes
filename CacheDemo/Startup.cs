@@ -34,8 +34,11 @@ namespace CacheDemo
            });
 
             services.AddScoped<ICacheDemoService, CacheDemoService>();
+            services.AddScoped<IDistributedCacheDemo, DistributedCacheDemo>();
+            services.AddSingleton<MySizedMemoryCache>();
             services.AddHttpClient<IAlbumService, AlbumService>(conf => conf.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/albums"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            // services.AddDistributedMemoryCache already added inside AddMvc
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
