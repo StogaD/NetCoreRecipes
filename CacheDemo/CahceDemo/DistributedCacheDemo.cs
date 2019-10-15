@@ -36,7 +36,13 @@ namespace CacheDemo.CahceDemo
             {
                 album = await _albumService.GetAlbumItem(id);
                 var serializedAlbum = JsonConvert.SerializeObject(album);
-                await _distributedCache.SetStringAsync(key, serializedAlbum);
+
+                DistributedCacheEntryOptions options = new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTimeOffset.FromUnixTimeSeconds(60),
+                };
+
+                await _distributedCache.SetStringAsync(key, serializedAlbum, options);
                 album.FromCacheOrService = DataSourceEnum.Repository;
             }
             else
