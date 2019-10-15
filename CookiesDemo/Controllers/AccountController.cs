@@ -47,11 +47,14 @@ namespace CookiesDemo.Controllers
 
             var authProperties = new AuthenticationProperties
             {
-                
-                //present in next commits
+                IsPersistent = true,
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(15)
             };
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
 
             return Ok();
         }

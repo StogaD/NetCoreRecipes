@@ -18,12 +18,10 @@ namespace CookiesDemo.Identity
                                select c.Value).FirstOrDefault();
 
 
-            //Only for test purpose -  it shoud check the last change from DB
+            //Only for test purpose -  it shoud check the last change from DB. Simulate that user was removed from db after 20 sec
             if (DateTime.TryParse(lastChanged, out var _dateTime))
             {
-                var timeSpan = TimeSpan.FromMinutes(2);
-
-                if (DateTime.Now.CompareTo(_dateTime.Add(timeSpan)) > 0)
+                if (DateTime.Now.CompareTo(_dateTime.AddMinutes(20)) > 0)
                 {
                     context.RejectPrincipal();
                     context.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
