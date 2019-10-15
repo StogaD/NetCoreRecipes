@@ -23,25 +23,31 @@ namespace CookiesDemo.Controllers
         }
         // GET: api/<controller>
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync([FromBody] ApplicationUser user)
+        public async Task<IActionResult> LoginAsync([FromBody] UserInputModel userInput)
         {
-            if (user == null || string.IsNullOrWhiteSpace(user.FullName) || string.IsNullOrWhiteSpace(user.Email))
+            if(!ModelState.IsValid)
             {
                 return BadRequest("Incorrect credentials !");
             }
-
             _logger.Information("User {Name} logged out at {Time}.", User.Identity.Name, DateTime.UtcNow);
 
-
             //For test purpose Fake users are used. User credentials are not stored and retrived from Db and not validated.
+            var user = new ApplicationUser
+            {
+                DateOfBirth = userInput.DateOfBirth.Value,
+                Email = userInput.Email,
+                FullName = userInput.FullName
+            };
+
             var role = user.Email == "admin@abc.com" ? "Admin" : "User";
 
             var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.Email),
-                    new Claim("FullName", user.FullName),
-                    new Claim(ClaimTypes.Role, role),
-                    new Claim("LastChanged", DateTime.Now.ToString())
+                new Claim(ClaimTypes.Name, user.Email),
+                new Claim("FullName", user.FullName),
+                new Claim(ClaimTypes.Role, role),
+                new Claim("LastChanged", DateTime.Now.ToString()),
+                new Claim(ClaimTypes.DateOfBirth, user.DateOfBirth.ToString()),
                 };
 
             var claimsIdentity = new ClaimsIdentity(

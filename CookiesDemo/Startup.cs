@@ -45,6 +45,7 @@ namespace CookiesDemo
                 options.AddPolicy("AggregatePolicy", policy => policy.RequireAssertion(
                     ctx => ctx.User.HasClaim(c => c.Issuer == "https://microsoftsecurity" && c.Type == "type1")));
 
+                options.AddPolicy("MinimumAge18", policy => policy.AddRequirements(new MinimumAgePolicyRequirement(18)));
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

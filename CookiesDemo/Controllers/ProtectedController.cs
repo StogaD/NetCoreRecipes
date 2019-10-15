@@ -40,5 +40,11 @@ namespace CookiesDemo.Controllers
         {
             return "Policy-based authorization demo";
         }
+        [HttpGet("PolicyProviderDemo")]
+        [Authorize(Policy = "MinimumAge18")]  // <-- fixed age. Next commit shows how to change it dynamicaly
+        public string MinimumAge()
+        {
+            return "Will be custom policy provider demo";
+        }
     }
 }
