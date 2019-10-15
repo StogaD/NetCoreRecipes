@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CookiesDemo.Policy;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 
 namespace CookiesDemo.Identity
 {
@@ -13,6 +14,11 @@ namespace CookiesDemo.Identity
         const string POLICY_PREFIX = "MinimumAge";
         public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
         public async Task<AuthorizationPolicy> GetDefaultPolicyAsync() => await FallbackPolicyProvider.GetDefaultPolicyAsync();
+
+        public CustomPolicyProvider(IOptions<AuthorizationOptions> options)
+        {
+            FallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
+        }
 
         public Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {
@@ -25,7 +31,7 @@ namespace CookiesDemo.Identity
                 return Task.FromResult(policy.Build());
             }
 
-            return Task.FromResult<AuthorizationPolicy>(null);
+            return FallbackPolicyProvider.GetPolicyAsync(policyName);  // <- if not match policyname then use another registered in startup.
 
         }
     }
