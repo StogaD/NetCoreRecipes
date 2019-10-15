@@ -32,14 +32,16 @@ namespace CookiesDemo.Controllers
 
             _logger.Information("User {Name} logged out at {Time}.", User.Identity.Name, DateTime.UtcNow);
 
+
             //For test purpose Fake users are used. User credentials are not stored and retrived from Db and not validated.
+            var role = user.Email == "admin@abc.com" ? "Admin" : "User";
+
             var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Email),
                     new Claim("FullName", user.FullName),
-                    new Claim(ClaimTypes.Role, "Admin"),
+                    new Claim(ClaimTypes.Role, role),
                     new Claim("LastChanged", DateTime.Now.ToString())
-
                 };
 
             var claimsIdentity = new ClaimsIdentity(

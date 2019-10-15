@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using CookiesDemo.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -47,6 +49,13 @@ namespace CookiesDemo
                 OnRedirectToLogin = (r) =>
                 {
                     r.Response.StatusCode = 401;
+                    return Task.FromResult(0);
+                },
+                OnRedirectToAccessDenied = (r) =>
+                {
+                    r.Response.StatusCode = 403;
+                    var byteArray = Encoding.ASCII.GetBytes("Use admin@abc.com to signin as an administrator role");
+                    r.Response.Body.Write(byteArray);
                     return Task.FromResult(0);
                 }
             });

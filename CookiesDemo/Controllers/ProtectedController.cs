@@ -20,5 +20,12 @@ namespace CookiesDemo.Controllers
             return new string[] { "value1", "value2" };
         }
         //will return 404 instead of 401. Automaticaly will be return to Login/.... See next commit to find out how to solve it;)
+
+        [HttpGet("RoleDemo")]
+        [Authorize(Roles = "Admin")]
+        public string RoleDemo()
+        {
+            return "Role-based authorization demo";
+        }
     }
 }
