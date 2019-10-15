@@ -42,7 +42,14 @@ namespace CookiesDemo
                       };*/
                 });
 
-            services.AddScoped<CustomCookieAuthenticationEvents>();
+            services.AddScoped<CustomCookieAuthenticationEvents>(sp => new CustomCookieAuthenticationEvents()
+            {
+                OnRedirectToLogin = (r) =>
+                {
+                    r.Response.StatusCode = 401;
+                    return Task.FromResult(0);
+                }
+            });
 
             services.AddSingleton(Log.Logger);
             services.AddSwaggerGen(c => c.SwaggerDoc("crv", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Demo Auth API" }));

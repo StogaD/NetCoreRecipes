@@ -28,15 +28,8 @@ namespace CookiesDemo.Identity
                     context.RejectPrincipal();
                     context.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 }
-
             }
             return base.ValidatePrincipal(context);
-        }
-
-        public override Task RedirectToLogin(RedirectContext<CookieAuthenticationOptions> context)
-        {
-            context.Response.StatusCode = 401;
-            return Task.CompletedTask;
         }
     }
 }
