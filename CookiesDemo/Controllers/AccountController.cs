@@ -54,9 +54,10 @@ namespace CookiesDemo.Controllers
             return Ok();
         }
         [HttpGet("logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> LogoutAsync()
         {
-            return Ok("Logout process will be implemented");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok();
         }
     }
 }
