@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppInsightDemo.Controllers
@@ -10,10 +11,17 @@ namespace AppInsightDemo.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private TelemetryClient _telemetry;
+        public ValuesController(TelemetryClient telemetry)
+        {
+            _telemetry = telemetry;
+        }
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            _telemetry.TrackEvent("api/values/get");
+
             return new string[] { "value1", "value2" };
         }
 
