@@ -35,10 +35,15 @@ namespace CookiesDemo
 
             services.AddAuthorization(options =>
             {
+                //1. Policy.RequireClaims, requireRole..
                 options.AddPolicy("ReqNamePolicy",
                     policy => policy.RequireClaim("FullName", "spiderman", "Batman"));
+                //2. Add custom requirements defined in seperate class derived from IAuthorizationRequirement 
                 options.AddPolicy("domainPolicy",
                     policy => policy.AddRequirements(new AdditionalPolicyRequirement("contoso.com")));
+                //3. sample aggregation policy 
+                options.AddPolicy("AggregatePolicy", policy => policy.RequireAssertion(
+                    ctx => ctx.User.HasClaim(c => c.Issuer == "https://microsoftsecurity" && c.Type == "type1")));
 
             });
 
