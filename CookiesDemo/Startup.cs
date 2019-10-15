@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CookiesDemo.Identity;
 using CookiesDemo.Policy;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +34,9 @@ namespace CookiesDemo
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddSingleton<IAuthorizationPolicyProvider, CustomPolicyProvider>();
+
+            //The following policies will be overwritten by the provider from above :(
             services.AddAuthorization(options =>
             {
                 //1. Policy.RequireClaims, requireRole..

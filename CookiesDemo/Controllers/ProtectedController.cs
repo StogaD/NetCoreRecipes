@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CookiesDemo.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,10 +42,10 @@ namespace CookiesDemo.Controllers
             return "Policy-based authorization demo";
         }
         [HttpGet("PolicyProviderDemo")]
-        [Authorize(Policy = "MinimumAge18")]  // <-- fixed age. Next commit shows how to change it dynamicaly
+        [MinimumAgeAuthorize(20)]    // better that fixed age from prev commit (Policy = "MinimumAge18")]
         public string MinimumAge()
         {
-            return "Will be custom policy provider demo";
+            return "Custom policy provider demo";
         }
     }
 }
