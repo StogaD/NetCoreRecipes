@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using CookiesDemo.Identity;
+using CookiesDemo.Policy;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +37,9 @@ namespace CookiesDemo
             {
                 options.AddPolicy("ReqNamePolicy",
                     policy => policy.RequireClaim("FullName", "spiderman", "Batman"));
+                options.AddPolicy("domainPolicy",
+                    policy => policy.AddRequirements(new AdditionalPolicyRequirement("contoso.com")));
+
             });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
