@@ -53,7 +53,7 @@ namespace CookiesDemo.Controllers
 
             return Ok();
         }
-        [HttpGet("logout")]
+        [HttpPost("logout")]
         public async Task<IActionResult> LogoutAsync()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
