@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CookiesDemo.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,10 +43,17 @@ namespace CookiesDemo.Controllers
             return "Policy-based authorization demo";
         }
         [HttpGet("PolicyProviderDemo")]
-        [MinimumAgeAuthorize(20)]    // better that fixed age from prev commit (Policy = "MinimumAge18")]
+        [MinimumAgeAuthorize(20)]
         public string MinimumAge()
         {
             return "Custom policy provider demo";
+        }
+
+        [HttpGet("JwtAuthScheme")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] 
+        public string JwtAuthScheme()
+        {
+            return "JWT bearer token Auth only";
         }
     }
 }

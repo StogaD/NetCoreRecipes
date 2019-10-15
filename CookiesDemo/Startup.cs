@@ -56,7 +56,8 @@ namespace CookiesDemo
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
                 {
                     opt.EventsType = typeof(CustomCookieAuthenticationEvents);
-                });
+                })
+                .AddJwtBearer();
 
             services.AddScoped<CustomCookieAuthenticationEvents>(sp => new CustomCookieAuthenticationEvents()
             {
