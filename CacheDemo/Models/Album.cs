@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CacheDemo.CahceDemo;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +15,7 @@ namespace CacheDemo.Models
         public string Title { get; set; }
 
         //* for cache inMemory Demo*/
-        public string FromCacheOrService { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))] 
+        public DataSourceEnum FromCacheOrService { get; set; }
     }
 }

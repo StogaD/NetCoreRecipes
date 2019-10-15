@@ -46,23 +46,23 @@ namespace CacheDemo.CahceDemo
                     album,
                     new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromSeconds(10)));
 
-                album.FromCacheOrService = "Service";
+                album.FromCacheOrService = album.FromCacheOrService = DataSourceEnum.Repository;
             }
             else
             {
-                album.FromCacheOrService = "Cache";
+                album.FromCacheOrService = album.FromCacheOrService = DataSourceEnum.Cache;
             }
             return album;
         }
 
         public async Task<Album> GetUsingInMemoryCacheV2Async(int id)
         {
-            var source = "cache";
+            var source = DataSourceEnum.Cache;
             var retrivedPhoto = await _memoryCache.GetOrCreateAsync<Album>(id.ToString(), async (cache) =>
             {
             var album = await _albumService.GetAlbumItem(id);
-            source = "FromRepo";
-            return album;
+            source = DataSourceEnum.Repository;
+                return album;
             });
 
             retrivedPhoto.FromCacheOrService = source;
@@ -72,7 +72,7 @@ namespace CacheDemo.CahceDemo
 
         public async Task<Album> GetUsingInMemoryCacheV3Async(int id)
         {
-            var source = "cache";
+            var source = DataSourceEnum.Cache;
             var retrivedPhoto = await _memoryCache.GetOrCreateAsync<Album>(id.ToString(), async (cache) =>
             {
                 cache.SetSlidingExpiration(TimeSpan.FromSeconds(3));
@@ -80,7 +80,7 @@ namespace CacheDemo.CahceDemo
                 cache.RegisterPostEvictionCallback(EvictionCallback, this); // fired when evicted from cache!
 
                 var album = await _albumService.GetAlbumItem(id);
-                source = "FromRepo";
+                source = DataSourceEnum.Repository;
                 return album;
             });
 
@@ -91,7 +91,7 @@ namespace CacheDemo.CahceDemo
 
         public async Task<Album> GetUsingInMemoryCacheV4Async(int id)
         {
-            var source = "cache";
+            var source = DataSourceEnum.Cache;
 
             var retrivedPhoto = await _memoryCache.GetOrCreateAsync<Album>(id.ToString(), async (cache) =>
             {
@@ -100,7 +100,7 @@ namespace CacheDemo.CahceDemo
                 cache.SetSize(1024);
                 cache.RegisterPostEvictionCallback(EvictionCallback, this); // fired when evicted from cache!
                 var album = await _albumService.GetAlbumItem(id);
-                source = "FromRepo";
+                source = DataSourceEnum.Repository;
                 return album;
             });
 

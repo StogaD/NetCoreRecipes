@@ -37,10 +37,12 @@ namespace CacheDemo.CahceDemo
                 album = await _albumService.GetAlbumItem(id);
                 var serializedAlbum = JsonConvert.SerializeObject(album);
                 await _distributedCache.SetStringAsync(key, serializedAlbum);
+                album.FromCacheOrService = DataSourceEnum.Repository;
             }
             else
             {
                 album = JsonConvert.DeserializeObject<Album>(fromCache);
+                album.FromCacheOrService = DataSourceEnum.Cache;
             }
 
             return album;

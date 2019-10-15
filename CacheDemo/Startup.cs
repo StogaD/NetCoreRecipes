@@ -38,7 +38,11 @@ namespace CacheDemo
             services.AddSingleton<MySizedMemoryCache>();
             services.AddHttpClient<IAlbumService, AlbumService>(conf => conf.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/albums"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            // services.AddDistributedMemoryCache already added inside AddMvc
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379,DefaultDatabase = 1";  //config to connect
+                options.InstanceName = "cacheInstance";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
