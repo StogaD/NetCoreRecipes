@@ -21,13 +21,16 @@ namespace CacheDemo.CahceDemo
     {
         private readonly IAlbumService _albumService;
         private readonly IMemoryCache _memoryCache;
+        private readonly IMemoryCache _sizedMemoryCache;
         private readonly ILogger _logger;
 
-        public CacheDemoService(IAlbumService albumService, IMemoryCache memoryCache, ILogger<CacheDemoService> logger)
+        public CacheDemoService(IAlbumService albumService, IMemoryCache memoryCache, ILogger<CacheDemoService> logger, MySizedMemoryCache myMemoryCache)
         {
             _albumService = albumService;
             _memoryCache = memoryCache;
             _logger = logger;
+
+            _sizedMemoryCache = myMemoryCache.Cache;
         }
 
         public async Task<Album> GetUsingInMemoryCacheAsync(int id)
@@ -74,9 +77,28 @@ namespace CacheDemo.CahceDemo
             {
                 cache.SetSlidingExpiration(TimeSpan.FromSeconds(3));
                 cache.SetAbsoluteExpiration(TimeSpan.FromSeconds(20));
-                cache.SetSize(5000);
                 cache.RegisterPostEvictionCallback(EvictionCallback, this); // fired when evicted from cache!
 
+                var album = await _albumService.GetAlbumItem(id);
+                source = "FromRepo";
+                return album;
+            });
+
+            retrivedPhoto.FromCacheOrService = source;
+
+            return retrivedPhoto;
+        }
+
+        public async Task<Album> GetUsingInMemoryCacheV4Async(int id)
+        {
+            var source = "cache";
+
+            var retrivedPhoto = await _memoryCache.GetOrCreateAsync<Album>(id.ToString(), async (cache) =>
+            {
+                cache.SetSlidingExpiration(TimeSpan.FromSeconds(3));
+                cache.SetAbsoluteExpiration(TimeSpan.FromSeconds(20));
+                cache.SetSize(1024);
+                cache.RegisterPostEvictionCallback(EvictionCallback, this); // fired when evicted from cache!
                 var album = await _albumService.GetAlbumItem(id);
                 source = "FromRepo";
                 return album;
