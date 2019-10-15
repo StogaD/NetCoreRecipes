@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
 
 namespace CookiesDemo
 {
@@ -30,17 +31,15 @@ namespace CookiesDemo
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
                {
-                   opt.LoginPath = "/Api/Account/LogIn";
-                   opt.LogoutPath = "/Api/Account/LogOff";
-
-                   //opt.Events.OnRedirectToLogin = (ctx) =>
-                   //{
-                   //    ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                   //    return Task.CompletedTask;
-                   //};
+                   opt.Events.OnRedirectToLogin = (ctx) =>
+                   {
+                       ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                       return Task.CompletedTask;
+                   };
                });
 
-               services.AddSwaggerGen(c => c.SwaggerDoc("crv", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Demo Auth API" }));
+            services.AddSingleton(Log.Logger);
+            services.AddSwaggerGen(c => c.SwaggerDoc("crv", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Demo Auth API" }));
 
           services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
