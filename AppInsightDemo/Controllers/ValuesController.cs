@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace AppInsightDemo.Controllers
 {
@@ -11,9 +12,11 @@ namespace AppInsightDemo.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private ILogger _logger;
         private TelemetryClient _telemetry;
-        public ValuesController(TelemetryClient telemetry)
+        public ValuesController(ILogger<ValuesController> logger, TelemetryClient telemetry)
         {
+            _logger = logger;
             _telemetry = telemetry;
         }
         // GET api/values
@@ -29,6 +32,9 @@ namespace AppInsightDemo.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
+            _logger.LogWarning($" Only warning or higher are automartically collected as default. Call: api/values/get/{id}");
+
+            _logger.LogInformation($"This log won't be collected by applicationInsight. Call: api/values/get/{id}");
             return "value";
         }
 
