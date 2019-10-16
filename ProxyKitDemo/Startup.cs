@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ProxyKit;
 using ProxyKitDemo.Configuration;
+using ProxyKitDemo.Extensions;
 using ProxyKitDemo.ProxyHandler;
 
 namespace ProxyKitDemo
@@ -33,6 +34,8 @@ namespace ProxyKitDemo
             services.Configure<ProxyKitOptions>(Configuration.GetSection("ProxyKit"));
 
             services.AddProxy();
+
+            services.AddScoped<IDemoProxyHandler, DemoProxyHandler>();
  
             services.AddSingleton<BooksProxyHandler>();
 
@@ -52,31 +55,9 @@ namespace ProxyKitDemo
                 app.UseHsts();
             }
 
-            // app.RunProxy(ProxyHandler);
-            // or use class implemented IProxyHandler
-
-            app.MapWhen(BooksWanted, RunProxyKit);
- 
+            app.UseAuthorsProxy();
             app.UseHttpsRedirection();
             app.UseMvc();
-        }
-
-        private bool BooksWanted(HttpContext ctx)
-        {
-            return ctx.Request.Path.Value.Contains("api/Book", StringComparison.OrdinalIgnoreCase);
-        }
-
-        private void RunProxyKit(IApplicationBuilder obj)
-        {
-            obj.RunProxy<BooksProxyHandler>();
-        }
-
-        private Task<HttpResponseMessage> ProxyHandler(HttpContext httpContext)
-        {
-            string host = Configuration["ProxyKit:Host"];
-            var forwardContext = httpContext.ForwardTo(host);
-            var response = forwardContext.Send();
-            return response;
         }
     }
 }
