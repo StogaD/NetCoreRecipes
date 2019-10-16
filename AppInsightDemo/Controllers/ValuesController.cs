@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -23,7 +24,7 @@ namespace AppInsightDemo.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            _telemetry.TrackEvent("api/values/get");
+            _telemetry.TrackEvent("api/values/get"); // Will be available in CustomEvents table in Azure Logs(Analytics)
 
             return new string[] { "value1", "value2" };
         }
@@ -32,9 +33,36 @@ namespace AppInsightDemo.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
+            _telemetry.GetMetric("AggregateMetricId").TrackValue(id);  //Aggregate by common Id  and sent automaticaly every 1 min.
+
+            //TrackTrace Demo
+            _telemetry.TrackTrace("Message_A");
+            _telemetry.TrackTrace("Message_B", Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Warning);
+            _telemetry.TrackTrace(new TraceTelemetry("Message_C"));
+
+            var properties = new Dictionary<string, string> {{"name", "ValueDemo"}, {"id", $"{id}"}};
+
+            _telemetry.TrackTrace("Message_D", properties);
+
+
+            //TrackException
+
+            try
+            {
+                var div = 18 / (666 - id);
+            }
+            catch (Exception ex)
+            {
+                var measurements = new Dictionary<string, double> {{"tid", this.HttpContext.Items.Count}}; //for test purpose only!
+
+                _telemetry.TrackException(ex, properties, measurements);
+            }
+
+
             _logger.LogWarning($" Only warning or higher are automartically collected as default. Call: api/values/get/{id}");
 
-            _logger.LogInformation($"This log won't be collected by applicationInsight. Call: api/values/get/{id}");
+            _logger.LogInformation($"Now also collected by applicationInsight (see Program.cs). Call: api/values/get/{id}");
+
             return "value";
         }
 
