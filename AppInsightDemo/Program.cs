@@ -19,6 +19,16 @@ namespace AppInsightDemo
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+            .ConfigureLogging(
+            (ctx,builder) =>
+            {
+                var key = ctx.Configuration["ApplicationInsights:InstrumentationKey"];
+
+                builder.AddApplicationInsights(key);
+                builder.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
+                                 ("", LogLevel.Information);
+
+            });
     }
 }
