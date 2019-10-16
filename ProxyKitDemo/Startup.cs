@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ProxyKit;
+using ProxyKitDemo.Configuration;
+using ProxyKitDemo.ProxyHandler;
 
 namespace ProxyKitDemo
 {
@@ -28,6 +30,7 @@ namespace ProxyKitDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ProxyKitOptions>(Configuration.GetSection("ProxyKit"));
             services.AddProxy();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -45,7 +48,9 @@ namespace ProxyKitDemo
                 app.UseHsts();
             }
 
-            app.RunProxy(ProxyHandler);
+            // app.RunProxy(ProxyHandler);
+            // or use class implemented IProxyHandler 
+            app.RunProxy<BooksProxyHandler>();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
