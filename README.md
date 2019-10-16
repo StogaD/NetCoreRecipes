@@ -110,3 +110,9 @@ Demostration code present only simple poc so the projects are simplified  to not
  - Conditional path
  - Example with Bilder extension to run proxy
  
+12. Application Insight
+ - Initial project from template
+ - Add ApplicationInsights.AspNetCore from nuget
+ - Register ApplicationInsightsTelemetry. Trazk event
+ - Integration with ILogger (defaulted)
+ - Integration with ILogger (change defaulted minimum log level collected by AI)
