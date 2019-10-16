@@ -31,7 +31,11 @@ namespace ProxyKitDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ProxyKitOptions>(Configuration.GetSection("ProxyKit"));
+
             services.AddProxy();
+ 
+            services.AddSingleton<BooksProxyHandler>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -49,10 +53,22 @@ namespace ProxyKitDemo
             }
 
             // app.RunProxy(ProxyHandler);
-            // or use class implemented IProxyHandler 
-            app.RunProxy<BooksProxyHandler>();
+            // or use class implemented IProxyHandler
+
+            app.MapWhen(BooksWanted, RunProxyKit);
+ 
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+
+        private bool BooksWanted(HttpContext ctx)
+        {
+            return ctx.Request.Path.Value.Contains("api/Book", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void RunProxyKit(IApplicationBuilder obj)
+        {
+            obj.RunProxy<BooksProxyHandler>();
         }
 
         private Task<HttpResponseMessage> ProxyHandler(HttpContext httpContext)

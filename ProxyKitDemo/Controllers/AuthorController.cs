@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ProxyKitDemo.Controllers
 {
     [Route("api/[controller]")]
-    public class AuthorController : Controller
+    public class AuthorsController : Controller
     {
         // GET: api/<controller>
         [HttpGet]
