@@ -12,6 +12,7 @@ namespace FluentValidationDemo.ValidationRules
         public CustomerEmailValidator()
         {
             RuleFor(x => x.Email).NotNull().EmailAddress();
+
         }
     }
 }
