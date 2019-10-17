@@ -32,6 +32,7 @@ namespace FluentValidationDemo
                 {
                     fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
                     fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    fv.ImplicitlyValidateChildProperties = true;
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
