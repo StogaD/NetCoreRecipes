@@ -31,6 +31,8 @@ namespace FluentValidationDemo.ValidationRules
 
             RuleFor(address => address.StreetLines).ListMustContainFewerThan(4);
 
+            RuleFor(address => address.StreetLines).ListMustContainFewerThanWithCustomMessage(2);
+
         }
     }
 }
