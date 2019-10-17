@@ -12,8 +12,8 @@ namespace FluentValidationDemo.ValidationRules
         public AddressValidator()
         {
             RuleFor(address => address.Postcode).NotNull();
-            RuleFor(address => address.City).NotNull();
-            RuleFor(address => address.Street).NotNull();
+            RuleFor(address => address.City).NotNull().WithMessage("City is required");
+            RuleFor(address => address.StreetLines).NotNull().ForEach(x => x.MaximumLength(20));
             RuleFor(address => address.Number).GreaterThan(0);
 
         }

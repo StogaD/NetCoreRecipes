@@ -35,16 +35,14 @@ namespace FluentValidationDemo.Controllers
         public IActionResult ValidateAndThrow([FromBody]Customer customer)
         {
             var validator = new CustomerValidator();
-            try
+
+            var results =  validator.Validate(customer);
+            if (!results.IsValid)
             {
-                validator.ValidateAndThrow(customer);
-                return Ok();
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
+                return BadRequest(results.Errors);
             }
 
+            return Ok();
         }
     }
 }

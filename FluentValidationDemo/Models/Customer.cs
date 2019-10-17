@@ -16,7 +16,7 @@ namespace FluentValidationDemo.Models
     public class Address
     {
         public string Postcode { get; set; }
-        public string Street { get; set; }
+        public List<string> StreetLines { get; set; }
         public int Number { get; set; }
         public string City { get; set; }
     }
