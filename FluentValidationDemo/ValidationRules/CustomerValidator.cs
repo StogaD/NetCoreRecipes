@@ -11,8 +11,9 @@ namespace FluentValidationDemo.ValidationRules
     {
         public CustomerValidator()
         {
-            RuleFor(customer => customer.Surname).NotEmpty();
+            RuleFor(customer => customer.Surname).NotEmpty().NotEqual("nowak");
             RuleFor(customer => customer.Address).NotNull();
+            RuleFor(customer => customer.Discount).LessThan(70);
         }
     }
 }
