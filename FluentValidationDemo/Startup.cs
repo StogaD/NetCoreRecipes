@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
+using FluentValidationDemo.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,7 @@ namespace FluentValidationDemo
                     fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                     fv.ImplicitlyValidateChildProperties = true;
                 })
+                .AddMvcOptions( opt => opt.Filters.Add(new ValidationResultFilter()))
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
