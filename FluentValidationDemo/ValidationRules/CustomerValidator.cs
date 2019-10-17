@@ -12,7 +12,7 @@ namespace FluentValidationDemo.ValidationRules
         public CustomerValidator()
         {
             RuleFor(customer => customer.Surname).NotEmpty().NotEqual("nowak");
-            RuleFor(customer => customer.Address).NotNull();
+            RuleFor(customer => customer.Address).NotNull().SetValidator(new AddressValidator());
             RuleFor(customer => customer.Discount).LessThan(70);
         }
     }
