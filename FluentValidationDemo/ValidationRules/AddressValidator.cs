@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
+using FluentValidation.Results;
 using FluentValidationDemo.Models;
 
 namespace FluentValidationDemo.ValidationRules
@@ -32,6 +33,15 @@ namespace FluentValidationDemo.ValidationRules
             RuleFor(address => address.StreetLines).ListMustContainFewerThan(4);
 
             RuleFor(address => address.StreetLines).ListMustContainFewerThanWithCustomMessage(2);
+
+
+            RuleFor(address => address.Number).Custom((n, context) =>
+            {
+                if (n < 999)
+                {
+                    context.AddFailure(new ValidationFailure(context.PropertyName, "the number is too big"));
+                }
+            });
 
         }
     }
