@@ -30,13 +30,28 @@ namespace FluentValidationDemo.Controllers
             return Ok();
         }
 
-        // POST api/<controller>
         [HttpPost("ValidateAndThrow")]
         public IActionResult ValidateAndThrow([FromBody]Customer customer)
         {
             var validator = new CustomerValidator();
+            try
+            {
+                validator.ValidateAndThrow(customer);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            var results =  validator.Validate(customer);
+        }
+        // POST api/<controller>
+        [HttpPost("ValidateWithRuleSet")]
+        public IActionResult ValidateWithRuleSet([FromBody]Customer customer)
+        {
+            var validator = new CustomerValidator();
+
+            var results =  validator.Validate(customer,ruleSet: "Names");
             if (!results.IsValid)
             {
                 return BadRequest(results.Errors);

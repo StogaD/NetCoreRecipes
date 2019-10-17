@@ -11,6 +11,15 @@ namespace FluentValidationDemo.ValidationRules
     {
         public CustomerValidator()
         {
+
+
+            RuleSet("Names", () =>
+            {
+                RuleFor(x => x.Surname).NotNull().MinimumLength(3);
+                RuleFor(x => x.Forename).NotNull().MinimumLength(3);
+            });
+
+
             RuleFor(customer => customer.Surname).NotEmpty().NotEqual("nowak");
             RuleFor(customer => customer.Address).NotNull().SetValidator(new AddressValidator());
             RuleFor(customer => customer.Discount).LessThan(70);
