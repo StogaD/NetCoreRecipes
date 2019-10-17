@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation;
 using FluentValidation.Results;
 using FluentValidationDemo.Models;
 using FluentValidationDemo.ValidationRules;
@@ -27,6 +28,23 @@ namespace FluentValidationDemo.Controllers
                 return BadRequest(results.Errors);
             }
             return Ok();
+        }
+
+        // POST api/<controller>
+        [HttpPost("ValidateAndThrow")]
+        public IActionResult ValidateAndThrow([FromBody]Customer customer)
+        {
+            var validator = new CustomerValidator();
+            try
+            {
+                validator.ValidateAndThrow(customer);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
     }
 }
