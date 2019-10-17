@@ -29,6 +29,8 @@ namespace FluentValidationDemo.ValidationRules
             RuleFor(address => address.StreetLines).NotNull().ForEach(x => x.MaximumLength(20));
             RuleFor(address => address.Number).GreaterThan(0);
 
+            RuleFor(address => address.StreetLines).ListMustContainFewerThan(4);
+
         }
     }
 }
