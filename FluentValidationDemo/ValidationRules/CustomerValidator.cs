@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
+using FluentValidation.Results;
 using FluentValidation.Validators;
 using FluentValidationDemo.Models;
 
@@ -26,6 +27,16 @@ namespace FluentValidationDemo.ValidationRules
             RuleFor(customer => customer.Discount).LessThan(70);
 
             Include(new CustomerEmailValidator());
+        }
+
+        protected override bool PreValidate(ValidationContext<Customer> context, ValidationResult result)
+        {
+            if (context.InstanceToValidate == null)
+            {
+                result.Errors.Add(new ValidationFailure("", "Please ensure a model was supplied."));
+                return false;
+            }
+            return true;
         }
     }
 }

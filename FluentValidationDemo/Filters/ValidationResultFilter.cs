@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace FluentValidationDemo.Filters
 {
-    public class ValidationResultFilter :ActionFilterAttribute
+    public class ValidationResultFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
