@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
+using FluentValidation.Validators;
 using FluentValidationDemo.Models;
 
 namespace FluentValidationDemo.ValidationRules
@@ -23,6 +24,8 @@ namespace FluentValidationDemo.ValidationRules
             RuleFor(customer => customer.Surname).NotEmpty().NotEqual("nowak");
             RuleFor(customer => customer.Address).NotNull().SetValidator(new AddressValidator());
             RuleFor(customer => customer.Discount).LessThan(70);
+
+            Include(new CustomerEmailValidator());
         }
     }
 }

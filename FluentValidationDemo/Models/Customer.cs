@@ -11,6 +11,7 @@ namespace FluentValidationDemo.Models
         public string Surname { get; set; }
         public string Forename { get; set; }
         public decimal Discount { get; set; }
+        public string Email { get; set; }
         public Address Address { get; set; }
     }
     public class Address
