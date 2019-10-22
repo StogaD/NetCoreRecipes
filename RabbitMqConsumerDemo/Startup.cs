@@ -6,10 +6,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RabbitMqClientDemo;
+using RabbitMqConsumerDemo.Data;
+using RabbitMqConsumerDemo.Handler;
+using RabbitMqConsumerDemo.Service;
 
 namespace RabbitMqConsumerDemo
 {
@@ -25,6 +30,28 @@ namespace RabbitMqConsumerDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IDbService, DbService>();
+            services.AddDbContext<MessageContext>(options =>
+               options.UseInMemoryDatabase("messageDb"));
+
+            services.Configure<RabbitClientOptions>(Configuration.GetSection("RabbitMQClient"));
+
+
+            IDbService dbService;
+            using (var scope = services.BuildServiceProvider().CreateScope())
+            {
+                var sp = scope.ServiceProvider;
+                dbService = sp.GetService<IDbService>();
+          
+
+
+            services.AddRabbitMqClient(x => x.GetService<IOptions<RabbitClientOptions>>().Value)
+                .AddConsumer(x=>
+                {
+                    return new DemoConsumer(x, new DemoHandler(dbService));
+                });
+               
+           }
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

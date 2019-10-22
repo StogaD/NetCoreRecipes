@@ -13,5 +13,9 @@ namespace RabbitMqClient
         string Password { get; }
 
         string VirtualHost { get; }
+
+         string ExchangeName { get; set; }
+         string QueueName { get; set; }
+         string RoutingKey { get; set; }
     }
 }
