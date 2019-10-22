@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using RabbitMqClient.Message;
 
 namespace RabbitMqClient.Publish
 {

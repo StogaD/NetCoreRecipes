@@ -17,7 +17,7 @@ namespace RabbitMqClient
         {
             _rabbitOptions = rabbitOptions;
 
-            var _connectionFactory = new ConnectionFactory
+            _connectionFactory = new ConnectionFactory
             {
                 HostName = _rabbitOptions.Host,
                 Password = _rabbitOptions.Password,
@@ -44,7 +44,7 @@ namespace RabbitMqClient
           catch(Exception ex)
             {
                 //todo: Add logging
-                Console.WriteLine("Error: {0)",ex.Message);
+                Console.WriteLine("Error: {0}",ex.Message);
             }
 
         }

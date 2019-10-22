@@ -6,6 +6,6 @@ namespace RabbitMqClient.Publish
 {
     public interface IMessanger
     {
-        void Send(string exchangeName, string routingKey, string rabbitMessage, Dictionary<string, string> customHeaders);
+        void Send(string exchangeName, string routingKey, string rabbitMessage, Dictionary<string, string> customHeaders = null);
     }
 }

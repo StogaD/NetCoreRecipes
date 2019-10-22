@@ -4,6 +4,7 @@ using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Framing;
 using Newtonsoft.Json;
+using RabbitMqClient.Message;
 
 namespace RabbitMqClient.Publish
 {
