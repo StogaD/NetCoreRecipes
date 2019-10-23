@@ -15,4 +15,21 @@ namespace RabbitMqConsumerDemo.Handler
         }
         public override List<IMessageHandler> MessageHandlers { get; }
     }
+
+    public class DemoConsumerProvider
+    {
+        IConnectionPoolManager _poolManagement;
+        IRabbitOptions _options;
+        IMessageHandler _handler;
+        public DemoConsumerProvider(IConnectionPoolManager poolManagement, IRabbitOptions options, IMessageHandler handler)
+        {
+            _handler = handler;
+            _poolManagement = poolManagement;
+        }
+        public DemoConsumer CreateConsumer()
+        {
+            var connManager = _poolManagement.Get(_options.VirtualHost) as ConnectionManager;
+            return new DemoConsumer(connManager, _handler);
+        }
+    }
 }

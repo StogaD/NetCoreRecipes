@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RabbitMqClient;
 using RabbitMqClientDemo;
 using RabbitMqConsumerDemo.Data;
 using RabbitMqConsumerDemo.Handler;
@@ -31,33 +32,31 @@ namespace RabbitMqConsumerDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IDbService, DbService>();
-            services.AddDbContext<MessageContext>(options =>
-               options.UseInMemoryDatabase("messageDb"));
+            services.AddDbContext<MessageContext>((options =>
+               options.UseInMemoryDatabase("messageDb")),ServiceLifetime.Scoped);
 
             services.Configure<RabbitClientOptions>(Configuration.GetSection("RabbitMQClient"));
 
 
-            IDbService dbService;
-            using (var scope = services.BuildServiceProvider().CreateScope())
-            {
-                var sp = scope.ServiceProvider;
-                dbService = sp.GetService<IDbService>();
-          
-
-
-            services.AddRabbitMqClient(x => x.GetService<IOptions<RabbitClientOptions>>().Value)
-                .AddConsumer(x=>
+                services.AddRabbitMqClient((s, o) =>
                 {
-                    return new DemoConsumer(x, new DemoHandler(dbService));
+                    o.AddMessanger = false;
+                    o.Options = s.GetService<IOptions<RabbitClientOptions>>().Value;
                 });
-               
-           }
+
+            services.AddScoped<IRabbitConsumerRegister, RabbitConsumerRegister>();
+            services.AddHostedService<RabbitConsumerService>();
+
+            services.AddScoped<DemoHandler>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IRabbitConsumerRegister rabbitRegistration)
         {
+          //  UseRabbitHandlers(rabbitRegistration);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -70,6 +69,13 @@ namespace RabbitMqConsumerDemo
 
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+
+        private void UseRabbitHandlers(IRabbitConsumerRegister rabbitHandlerRegister)
+        {
+
+
+            rabbitHandlerRegister.RegisterHandler();
         }
     }
 }

@@ -28,8 +28,12 @@ namespace RabbitMqPublisherDemo
         {
             services.Configure<RabbitClientOptions>(Configuration.GetSection("RabbitMQClient"));
 
-            services.AddRabbitMqClient(x => x.GetService<IOptions<RabbitClientOptions>>().Value)
-                .AddMessenger();
+            services.AddRabbitMqClient( (sp, o) =>
+            {
+                o.AddMessanger = true;
+                o.Options = sp.GetService<IOptions<RabbitClientOptions>>().Value;
+            });
+
             services.AddScoped<IRabbitMqService, RabbitMqService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

@@ -9,6 +9,12 @@ using RabbitMqClient.Publish;
 
 namespace RabbitMqClientDemo
 {
+
+    public class Parameters
+    {
+        public bool AddMessanger { get; set; }
+        public IRabbitOptions Options { get; set; }
+    }
     public interface IRabbitMqClientBuilder
     {
         IServiceCollection Services { get; set; }
@@ -23,65 +29,35 @@ namespace RabbitMqClientDemo
 
     public static class ServiceCollectionCoreExtension
     {
-        public static IRabbitMqClientBuilder AddRabbitMqClient(this IServiceCollection services, Func<IServiceProvider, IRabbitOptions> options)
+
+        public static IServiceCollection AddRabbitMqClient(this IServiceCollection services, Action<IServiceProvider, Parameters> addMessanger, IRabbitOptions options = null)
         {
-            IRabbitOptions settings;
+            var par = new Parameters();
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
                 var sp = scope.ServiceProvider;
-                settings = options(sp);
+                addMessanger(sp, par);
+
             }
-
-            return services.AddRabbitMqClient(settings);
-
-        }
-
-        public static IRabbitMqClientBuilder AddRabbitMqClient(this IServiceCollection services, IRabbitOptions options)
-        {
-            IRabbitOptions settings = options;
-
-            var connPoolManager = new ConnectionPoolManager();
-
-            connPoolManager.RegisterConnecton(settings.VirtualHost, settings);
-
-            services.AddSingleton<IConnectionPoolManager>(connPoolManager);
-
-            var connManager = new ConnectionManager(settings);
-            connManager.Connect();
-
-
-            //services.AddSingleton<IMessanger>(x =>
-            //{
-            //    var connectionManager = connPoolManager.Get(settings.VirtualHost);
-
-            //    return new Messanger(connectionManager);
-            //});
-
-            return new RabbitMqClientBuilder { Services = services, Options = options };
-        }
-
-        public static IServiceCollection AddMessenger(this IRabbitMqClientBuilder builder)
-        {
-            IServiceCollection sc = builder.Services;
-            IConnectionPoolManager connPoolManager;
-            using (var scope = sc.BuildServiceProvider().CreateScope())
+            var connectionPoolManager = new ConnectionPoolManager();
+            connectionPoolManager.RegisterConnecton(par.Options.VirtualHost, par.Options);
+            services.AddSingleton<IConnectionPoolManager>(x =>
             {
-                var sp = scope.ServiceProvider;
-                connPoolManager = sp.GetService<IConnectionPoolManager>();
-            }
-            if (connPoolManager == null)
-            {
-                throw new InvalidOperationException("connectionPoolManager is not registered");
-            }
-
-            builder.Services.AddSingleton<IMessanger>(x =>
-            {
-                var connectionManager = connPoolManager.Get(builder.Options.VirtualHost);
-
-                return new Messanger(connectionManager);
+                return connectionPoolManager;
             });
 
-            return builder.Services;
+            if(par.AddMessanger)
+            {
+                services.AddSingleton<IMessanger>(x =>
+                {
+                    var connectionManager = connectionPoolManager.Get(par.Options.VirtualHost);
+                    return new Messanger(connectionManager);
+                }
+               );
+
+            }
+
+            return services;
         }
         public static IServiceCollection AddConsumer(this IRabbitMqClientBuilder builder, Func<ConnectionManager,Consumer> consumerProvider)
         {
