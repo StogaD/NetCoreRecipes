@@ -44,7 +44,7 @@ namespace MiddlewareDemo
             }
 
             app.UseDemoMiddleware("parameter");
-         //   app.UseNewiddleware();
+            app.UseFactoryBasedMiddleware("parameter");
             app.UseHttpsRedirection();
             app.UseMvc();
         }

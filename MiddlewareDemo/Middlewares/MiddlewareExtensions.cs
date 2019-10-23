@@ -13,9 +13,10 @@ namespace MiddlewareDemo.Middlewares
             return builder.UseMiddleware<ConventionalMiddleware>(options);
         }
 
-        public static IApplicationBuilder UseNewiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseFactoryBasedMiddleware(this IApplicationBuilder builder, string options)
         {
-            return builder.UseMiddleware<FactoryActivatedMiddleware>();
+            // Passing 'option' as an argument throws a NotSupportedException at runtime.
+            return builder.UseMiddleware<FactoryActivatedMiddleware>(options);
         }
     }
 }
