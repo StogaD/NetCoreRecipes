@@ -6,11 +6,16 @@ using Microsoft.AspNetCore.Builder;
 
 namespace MiddlewareDemo.Middlewares
 {
-    public static class DemoMiddlewareExtension
+    public static class MiddlewareExtensions
     {
         public static IApplicationBuilder UseDemoMiddleware(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<DemoMiddleware>();
+            return builder.UseMiddleware<ConventionalMiddleware>();
+        }
+
+        public static IApplicationBuilder UseNewiddleware(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<FactoryActivatedMiddleware>();
         }
     }
 }

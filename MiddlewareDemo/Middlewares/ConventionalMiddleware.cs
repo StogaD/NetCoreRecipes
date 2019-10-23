@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace MiddlewareDemo.Middlewares
 {
-    public class DemoMiddleware
+    public class ConventionalMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public DemoMiddleware(RequestDelegate next)
+        public ConventionalMiddleware(RequestDelegate next)
         {
             _next = next;
         }
