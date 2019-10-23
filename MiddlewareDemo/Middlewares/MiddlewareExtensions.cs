@@ -8,9 +8,9 @@ namespace MiddlewareDemo.Middlewares
 {
     public static class MiddlewareExtensions
     {
-        public static IApplicationBuilder UseDemoMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseDemoMiddleware(this IApplicationBuilder builder, string options)
         {
-            return builder.UseMiddleware<ConventionalMiddleware>();
+            return builder.UseMiddleware<ConventionalMiddleware>(options);
         }
 
         public static IApplicationBuilder UseNewiddleware(this IApplicationBuilder builder)

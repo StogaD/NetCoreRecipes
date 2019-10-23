@@ -10,9 +10,11 @@ namespace MiddlewareDemo.Middlewares
     {
         private readonly RequestDelegate _next;
 
-        public ConventionalMiddleware(RequestDelegate next)
+        private readonly string _options;
+        public ConventionalMiddleware(RequestDelegate next, string options)
         {
             _next = next;
+            _options = options;
         }
 
         public Task Invoke(HttpContext httpContext)

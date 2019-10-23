@@ -43,8 +43,8 @@ namespace MiddlewareDemo
                 app.UseHsts();
             }
 
-            app.UseDemoMiddleware();
-            app.UseNewiddleware();
+            app.UseDemoMiddleware("parameter");
+         //   app.UseNewiddleware();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
