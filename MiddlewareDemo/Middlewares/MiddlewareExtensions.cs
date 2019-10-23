@@ -16,7 +16,7 @@ namespace MiddlewareDemo.Middlewares
         public static IApplicationBuilder UseFactoryBasedMiddleware(this IApplicationBuilder builder, string options)
         {
             // Passing 'option' as an argument throws a NotSupportedException at runtime.
-            return builder.UseMiddleware<FactoryActivatedMiddleware>(options);
+            return builder.UseMiddleware<FactoryActivatedMiddleware>();
         }
     }
 }
