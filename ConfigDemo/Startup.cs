@@ -37,6 +37,7 @@ namespace ConfigDemo
             services.AddOptions<Parameters>().Configure(o => o.Speed = 2);
 
             services.Configure<Parameters>(Configuration.GetSection("Parameters"));
+            services.Configure<Parameters>("specialconfigs",Configuration.GetSection("SpecialParameters"));
 
             services.PostConfigure<Parameters>(x => x.Speed = x.Speed * 2);
 
