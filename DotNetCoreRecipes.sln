@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.645
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Swagger", "Swagger", "{E8463D62-E472-416B-A3A2-9056E9ED1D6B}"
 EndProject
@@ -53,7 +53,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppInsightDemo", "AppInsigh
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FluentValidation", "FluentValidation", "{B7486C6E-9A38-4EE7-A0B8-C6561B181C90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentValidationDemo", "FluentValidationDemo\FluentValidationDemo.csproj", "{023FCB72-458C-42BA-AD37-D6306313E2C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentValidationDemo", "FluentValidationDemo\FluentValidationDemo.csproj", "{023FCB72-458C-42BA-AD37-D6306313E2C8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdServerHost", "IdentityServer4Demo\QuickStart1\IdServerHost\IdServerHost.csproj", "{370BD9E7-071A-4F1F-B45C-B59716BC494D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer4", "IdentityServer4", "{EC621FD5-DDC5-4810-850C-D2FF226CF967}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuickStart1", "QuickStart1", "{A1AE89C7-EF19-4374-BB5E-8B6DFE90B71B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api1", "IdentityServer4Demo\QuickStart1\Api1\Api1.csproj", "{258813D3-58F2-4246-AC98-709034D81E64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +121,14 @@ Global
 		{023FCB72-458C-42BA-AD37-D6306313E2C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{023FCB72-458C-42BA-AD37-D6306313E2C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{023FCB72-458C-42BA-AD37-D6306313E2C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{370BD9E7-071A-4F1F-B45C-B59716BC494D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{370BD9E7-071A-4F1F-B45C-B59716BC494D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{370BD9E7-071A-4F1F-B45C-B59716BC494D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{370BD9E7-071A-4F1F-B45C-B59716BC494D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{258813D3-58F2-4246-AC98-709034D81E64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{258813D3-58F2-4246-AC98-709034D81E64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{258813D3-58F2-4246-AC98-709034D81E64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{258813D3-58F2-4246-AC98-709034D81E64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +147,9 @@ Global
 		{55653CA6-9416-48BC-864D-868D3998B3CC} = {FD63E243-B628-4809-AF99-9D83189A163D}
 		{EF2FC2A8-29AE-49BC-ADB2-EC4EBEDA8F23} = {20C4BBC3-FDCB-489D-B71B-CF11D66C19C9}
 		{023FCB72-458C-42BA-AD37-D6306313E2C8} = {B7486C6E-9A38-4EE7-A0B8-C6561B181C90}
+		{370BD9E7-071A-4F1F-B45C-B59716BC494D} = {A1AE89C7-EF19-4374-BB5E-8B6DFE90B71B}
+		{A1AE89C7-EF19-4374-BB5E-8B6DFE90B71B} = {EC621FD5-DDC5-4810-850C-D2FF226CF967}
+		{258813D3-58F2-4246-AC98-709034D81E64} = {A1AE89C7-EF19-4374-BB5E-8B6DFE90B71B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {08A99856-D8D3-4621-BFBD-A50CBCE47C03}
