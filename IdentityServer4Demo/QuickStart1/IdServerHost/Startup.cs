@@ -17,11 +17,12 @@ namespace IdServerHost
     public void ConfigureServices(IServiceCollection services)
     {
 
-       
+
       var builder = services.AddIdentityServer()
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                //.AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApis())
-                .AddInMemoryClients(Config.GetClients());
+                .AddInMemoryClients(Config.GetClients())
+                .AddTestUsers(Config.GetUsers());
 
       builder.AddSigningCredential("CN=localhost");
 

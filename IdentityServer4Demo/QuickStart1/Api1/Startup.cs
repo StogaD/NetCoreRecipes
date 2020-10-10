@@ -32,7 +32,7 @@ namespace Api1
         {
           options.Authority = "https://localhost:44326";
           options.RequireHttpsMetadata = false;
-          //options.Audience = "api1";
+          options.Audience = "api1";
 
         });
 
